@@ -1,0 +1,182 @@
+[
+  {
+    "date": "Wed, Jan 16",
+    "shift": "0:24:36",
+    "driving": "0:19:22",
+    "inViolation": "0:00:00",
+    "from": "1.5 mi E San Francisco, CA",
+    "to": "1.2 mi ESE San Francisco, CA",
+    "violations": "none",
+    "driverName": "John Smith",
+    "driverLicense": "D9012345",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "6:00:00 AM", "duration": "6:00:00", "status": "OFF DUTY" },
+      { "start": "6:00:00 AM", "end": "6:30:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "6:30:00 AM", "end": "12:00:00 PM", "duration": "5:30:00", "status": "DRIVING" },
+      { "start": "12:00:00 PM", "end": "12:31:00 PM", "duration": "0:31:00", "status": "ON DUTY" },
+      { "start": "12:31:00 PM", "end": "2:33:00 PM", "duration": "2:02:00", "status": "DRIVING" }
+    ]
+  },
+  {
+    "date": "Thu, Jan 17",
+    "shift": "8:45:12",
+    "driving": "6:30:00",
+    "inViolation": "0:15:00",
+    "from": "Los Angeles, CA",
+    "to": "San Diego, CA",
+    "violations": "Drive Time Exceeded",
+    "driverName": "Michael Johnson",
+    "driverLicense": "D9012345",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "4:00:00 AM", "duration": "4:00:00", "status": "OFF DUTY" },
+      { "start": "4:00:00 AM", "end": "5:00:00 AM", "duration": "1:00:00", "status": "ON DUTY" },
+      { "start": "5:00:00 AM", "end": "10:00:00 AM", "duration": "5:00:00", "status": "DRIVING" },
+      { "start": "10:00:00 AM", "end": "10:30:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "10:30:00 AM", "end": "3:45:00 PM", "duration": "5:15:00", "status": "DRIVING" }
+    ]
+  },
+  {
+    "date": "Fri, Jan 18",
+    "shift": "7:30:00",
+    "driving": "5:45:30",
+    "inViolation": "0:00:00",
+    "from": "Seattle, WA",
+    "to": "Portland, OR",
+    "violations": "none",
+    "driverName": "David Wilson",
+    "driverLicense": "D9012345",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "5:30:00 AM", "duration": "5:30:00", "status": "OFF DUTY" },
+      { "start": "5:30:00 AM", "end": "6:00:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "6:00:00 AM", "end": "9:45:00 AM", "duration": "3:45:00", "status": "DRIVING" },
+      { "start": "9:45:00 AM", "end": "10:30:00 AM", "duration": "0:45:00", "status": "ON DUTY" },
+      { "start": "10:30:00 AM", "end": "3:15:00 PM", "duration": "4:45:00", "status": "DRIVING" }
+    ]
+  },
+  {
+    "date": "Sat, Jan 19",
+    "shift": "9:15:00",
+    "driving": "7:00:00",
+    "inViolation": "0:30:00",
+    "from": "Chicago, IL",
+    "to": "Indianapolis, IN",
+    "violations": "Break Not Taken",
+    "driverName": "James Brown",
+    "driverLicense": "D9012345",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "5:00:00 AM", "duration": "5:00:00", "status": "OFF DUTY" },
+      { "start": "5:00:00 AM", "end": "6:00:00 AM", "duration": "1:00:00", "status": "ON DUTY" },
+      { "start": "6:00:00 AM", "end": "11:00:00 AM", "duration": "5:00:00", "status": "DRIVING" },
+      { "start": "11:00:00 AM", "end": "11:30:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "11:30:00 AM", "end": "3:45:00 PM", "duration": "4:15:00", "status": "DRIVING" }
+    ]
+  },
+  {
+    "date": "Sun, Jan 20",
+    "shift": "10:00:00",
+    "driving": "8:00:00",
+    "inViolation": "0:00:00",
+    "from": "New York, NY",
+    "to": "Boston, MA",
+    "violations": "none",
+    "driverName": "Robert Taylor",
+    "driverLicense": "D5678901",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "4:00:00 AM", "duration": "4:00:00", "status": "OFF DUTY" },
+      { "start": "4:00:00 AM", "end": "5:00:00 AM", "duration": "1:00:00", "status": "ON DUTY" },
+      { "start": "5:00:00 AM", "end": "10:00:00 AM", "duration": "5:00:00", "status": "DRIVING" },
+      { "start": "10:00:00 AM", "end": "10:30:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "10:30:00 AM", "end": "3:30:00 PM", "duration": "5:00:00", "status": "DRIVING" }
+    ]
+  },
+  {
+    "date": "Mon, Jan 21",
+    "shift": "8:30:00",
+    "driving": "6:45:00",
+    "inViolation": "0:15:00",
+    "from": "Dallas, TX",
+    "to": "Houston, TX",
+    "violations": "Drive Time Exceeded",
+    "driverName": "William Anderson",
+    "driverLicense": "D9012345",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "4:30:00 AM", "duration": "4:30:00", "status": "OFF DUTY" },
+      { "start": "4:30:00 AM", "end": "5:00:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "5:00:00 AM", "end": "10:00:00 AM", "duration": "5:00:00", "status": "DRIVING" },
+      { "start": "10:00:00 AM", "end": "10:30:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "10:30:00 AM", "end": "3:15:00 PM", "duration": "4:45:00", "status": "DRIVING" }
+    ]
+  },
+  {
+    "date": "Tue, Jan 22",
+    "shift": "7:45:00",
+    "driving": "6:00:00",
+    "inViolation": "0:00:00",
+    "from": "Phoenix, AZ",
+    "to": "Las Vegas, NV",
+    "violations": "none",
+    "driverName": "Christopher Martinez",
+    "driverLicense": "D9012345",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "5:00:00 AM", "duration": "5:00:00", "status": "OFF DUTY" },
+      { "start": "5:00:00 AM", "end": "5:30:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "5:30:00 AM", "end": "10:30:00 AM", "duration": "5:00:00", "status": "DRIVING" },
+      { "start": "10:30:00 AM", "end": "11:00:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "11:00:00 AM", "end": "3:00:00 PM", "duration": "4:00:00", "status": "DRIVING" }
+    ]
+  },
+  {
+    "date": "Wed, Jan 23",
+    "shift": "9:00:00",
+    "driving": "7:30:00",
+    "inViolation": "0:30:00",
+    "from": "Miami, FL",
+    "to": "Orlando, FL",
+    "violations": "Break Not Taken",
+    "driverName": "Daniel Hernandez",
+    "driverLicense": "D9012345",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "4:00:00 AM", "duration": "4:00:00", "status": "OFF DUTY" },
+      { "start": "4:00:00 AM", "end": "5:00:00 AM", "duration": "1:00:00", "status": "ON DUTY" },
+      { "start": "5:00:00 AM", "end": "10:00:00 AM", "duration": "5:00:00", "status": "DRIVING" },
+      { "start": "10:00:00 AM", "end": "10:30:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "10:30:00 AM", "end": "3:00:00 PM", "duration": "4:30:00", "status": "DRIVING" }
+    ]
+  },
+  {
+    "date": "Thu, Jan 24",
+    "shift": "8:00:00",
+    "driving": "6:15:00",
+    "inViolation": "0:00:00",
+    "from": "Denver, CO",
+    "to": "Salt Lake City, UT",
+    "violations": "none",
+    "driverName": "Matthew Lopez",
+    "driverLicense": "D9012345",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "4:00:00 AM", "duration": "4:00:00", "status": "OFF DUTY" },
+      { "start": "4:00:00 AM", "end": "5:00:00 AM", "duration": "1:00:00", "status": "ON DUTY" },
+      { "start": "5:00:00 AM", "end": "10:00:00 AM", "duration": "5:00:00", "status": "DRIVING" },
+      { "start": "10:00:00 AM", "end": "10:30:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "10:30:00 AM", "end": "2:45:00 PM", "duration": "4:15:00", "status": "DRIVING" }
+    ]
+  },
+  {
+    "date": "Fri, Jan 25",
+    "shift": "7:15:00",
+    "driving": "5:30:00",
+    "inViolation": "0:15:00",
+    "from": "Atlanta, GA",
+    "to": "Charlotte, NC",
+    "violations": "Drive Time Exceeded",
+    "driverName": "Anthony Gonzalez",
+    "driverLicense": "D9012345",
+    "dataPoints": [
+      { "start": "12:00:00 AM", "end": "4:30:00 AM", "duration": "4:30:00", "status": "OFF DUTY" },
+      { "start": "4:30:00 AM", "end": "5:00:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "5:00:00 AM", "end": "10:00:00 AM", "duration": "5:00:00", "status": "DRIVING" },
+      { "start": "10:00:00 AM", "end": "10:30:00 AM", "duration": "0:30:00", "status": "ON DUTY" },
+      { "start": "10:30:00 AM", "end": "2:00:00 PM", "duration": "3:30:00", "status": "DRIVING" }
+    ]
+  }
+]

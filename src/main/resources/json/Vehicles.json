@@ -1,0 +1,102 @@
+[
+  {
+    "vehicle": "Freightliner Cascadia",
+    "efficiency": "6.5 mpg",
+    "fuelUsed": "60 gallons",
+    "distance": "390 miles",
+    "estCarbonEmissions": "780 kg",
+    "estCost": "$180",
+    "totalEngineRunTime": "12 hours",
+    "idleTimePercentage": "15%"
+  },
+  {
+    "vehicle": "Peterbilt 579",
+    "efficiency": "6.0 mpg",
+    "fuelUsed": "70 gallons",
+    "distance": "420 miles",
+    "estCarbonEmissions": "840 kg",
+    "estCost": "$210",
+    "totalEngineRunTime": "13 hours",
+    "idleTimePercentage": "20%"
+  },
+  {
+    "vehicle": "Kenworth T680",
+    "efficiency": "6.2 mpg",
+    "fuelUsed": "65 gallons",
+    "distance": "403 miles",
+    "estCarbonEmissions": "806 kg",
+    "estCost": "$195",
+    "totalEngineRunTime": "12.5 hours",
+    "idleTimePercentage": "18%"
+  },
+  {
+    "vehicle": "Volvo VNL",
+    "efficiency": "6.8 mpg",
+    "fuelUsed": "55 gallons",
+    "distance": "374 miles",
+    "estCarbonEmissions": "748 kg",
+    "estCost": "$165",
+    "totalEngineRunTime": "11 hours",
+    "idleTimePercentage": "12%"
+  },
+  {
+    "vehicle": "Mack Anthem",
+    "efficiency": "5.8 mpg",
+    "fuelUsed": "75 gallons",
+    "distance": "435 miles",
+    "estCarbonEmissions": "900 kg",
+    "estCost": "$225",
+    "totalEngineRunTime": "14 hours",
+    "idleTimePercentage": "22%"
+  },
+  {
+    "vehicle": "International LT Series",
+    "efficiency": "6.3 mpg",
+    "fuelUsed": "62 gallons",
+    "distance": "391 miles",
+    "estCarbonEmissions": "782 kg",
+    "estCost": "$186",
+    "totalEngineRunTime": "12 hours",
+    "idleTimePercentage": "16%"
+  },
+  {
+    "vehicle": "Hino XL Series",
+    "efficiency": "8.0 mpg",
+    "fuelUsed": "40 gallons",
+    "distance": "320 miles",
+    "estCarbonEmissions": "480 kg",
+    "estCost": "$120",
+    "totalEngineRunTime": "10 hours",
+    "idleTimePercentage": "10%"
+  },
+  {
+    "vehicle": "Isuzu NPR HD",
+    "efficiency": "10 mpg",
+    "fuelUsed": "35 gallons",
+    "distance": "350 miles",
+    "estCarbonEmissions": "420 kg",
+    "estCost": "$105",
+    "totalEngineRunTime": "9 hours",
+    "idleTimePercentage": "8%"
+  },
+  {
+    "vehicle": "Ram ProMaster",
+    "efficiency": "12 mpg",
+    "fuelUsed": "30 gallons",
+    "distance": "360 miles",
+    "estCarbonEmissions": "360 kg",
+    "estCost": "$90",
+    "totalEngineRunTime": "8 hours",
+    "idleTimePercentage": "7%"
+  },
+  {
+    "vehicle": "Ford Transit Cargo Van",
+    "efficiency": "15 mpg",
+    "fuelUsed": "25 gallons",
+    "distance": "375 miles",
+    "estCarbonEmissions": "300 kg",
+    "estCost": "$75",
+    "totalEngineRunTime": "7.5 hours",
+    "idleTimePercentage": "5%"
+  }
+]
