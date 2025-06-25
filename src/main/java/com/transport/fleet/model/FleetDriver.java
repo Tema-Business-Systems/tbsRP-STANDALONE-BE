@@ -311,6 +311,13 @@ public class FleetDriver {
     private int x10csup;
     @Column(name = "X10CSUPFLG_0")
     private int x10csupflg;
+    //Added for ressolving error for these three column--Added by Shubham
+    @Column(name = "X10CPICKER_0")
+    private int x10cpicker;
+    @Column(name = "X10CSEC_0")
+    private int x10csec;
+    @Column(name = "XSALESREP_0")
+    private int xsalesrep;
 
     @PrePersist
     @PreUpdate
@@ -321,9 +328,9 @@ public class FleetDriver {
             if(column.get(this)==null && !column.getName().equalsIgnoreCase("ROWID")){
                 if(column.getType().equals(String.class)){
                     column.set(this, "");
-                }else if(column.getType().equals(Integer.class)){
+                }else if(column.getType().equals(Integer.class) || column.getType().equals(int.class)){
                     column.set(this, 0);
-                }else if(column.getType().equals(Double.class)){
+                }else if(column.getType().equals(Double.class) || column.getType().equals(double.class)){
                     column.set(this, 0.0);
                 }else if(column.getType().equals(Date.class)){
                     column.set(this, new Date());

@@ -1161,31 +1161,33 @@ public class FleetService {
         }
 
         if(isCreate){
-            int lineNum=1;
-            for(Document document: driverVO.getDocumentList()){
-                String query = "insert into "+dbSchema+".XX10CDRIVERD " +
-                        "(UPDTICK_0, LINNUM_0, GTPASS_0, ISSAUTHORITY_0, ISSEMIRATE_0, PASSDURATION_0, FEES_0, CURRENCY_0, EXPDATE_0, DRIVERID_0, CREDATTIM_0, UPDDATTIM_0, AUUID_0, " +
-                        "CREUSR_0, UPDUSR_0, XDOCNO_0, XDOCUP_0, XTYPE_0) " +
-                        "values (0, :lineNum, :docType, :issuingAuthority, '', :issuingDate, 0.0, '', :expiration, :driverId, :credAtTime, :updAtTime, :uuid, '', '', :docNum, '', 1)";
+            if(driverVO.getDocumentList() != null){
+                int lineNum=1;
+                for(Document document: driverVO.getDocumentList()) {
+                    String query = "insert into " + dbSchema + ".XX10CDRIVERD " +
+                            "(UPDTICK_0, LINNUM_0, GTPASS_0, ISSAUTHORITY_0, ISSEMIRATE_0, PASSDURATION_0, FEES_0, CURRENCY_0, EXPDATE_0, DRIVERID_0, CREDATTIM_0, UPDDATTIM_0, AUUID_0, " +
+                            "CREUSR_0, UPDUSR_0, XDOCNO_0, XDOCUP_0, XTYPE_0) " +
+                            "values (0, :lineNum, :docType, :issuingAuthority, '', :issuingDate, 0.0, '', :expiration, :driverId, :credAtTime, :updAtTime, :uuid, '', '', :docNum, '', 1)";
 
-                Query nativeQuery = entityManager.createNativeQuery(query);
+                    Query nativeQuery = entityManager.createNativeQuery(query);
 
-                nativeQuery.setParameter("lineNum", lineNum * 1000);
-                nativeQuery.setParameter("docType", document.getDocType());
-                nativeQuery.setParameter("issuingAuthority", document.getIssuingAuthority());
-                nativeQuery.setParameter("issuingDate", document.getIssuingDate());
-                nativeQuery.setParameter("expiration", document.getExpiration());
-                nativeQuery.setParameter("driverId", driverVO.getDriverId());
-                nativeQuery.setParameter("credAtTime", new Date());
-                nativeQuery.setParameter("updAtTime", new Date());
-                nativeQuery.setParameter("uuid", new byte[]{0});
-                nativeQuery.setParameter("docNum", document.getDocNum());
+                    nativeQuery.setParameter("lineNum", lineNum * 1000);
+                    nativeQuery.setParameter("docType", document.getDocType());
+                    nativeQuery.setParameter("issuingAuthority", document.getIssuingAuthority());
+                    nativeQuery.setParameter("issuingDate", document.getIssuingDate());
+                    nativeQuery.setParameter("expiration", document.getExpiration());
+                    nativeQuery.setParameter("driverId", driverVO.getDriverId());
+                    nativeQuery.setParameter("credAtTime", new Date());
+                    nativeQuery.setParameter("updAtTime", new Date());
+                    nativeQuery.setParameter("uuid", new byte[]{0});
+                    nativeQuery.setParameter("docNum", document.getDocNum());
 
-                nativeQuery.executeUpdate();
+                    nativeQuery.executeUpdate();
 
-                lineNum++;
+                    lineNum++;
+                }
             }
-        }else if(driverVO.getDocumentList().isEmpty()){
+        }else if(driverVO.getDocumentList()==null || driverVO.getDocumentList().isEmpty()){
             String deleteQuery = "DELETE from "+dbSchema+".XX10CDRIVERD where DRIVERID_0= '"+driverVO.getDriverId()+"'";
             entityManager.createNativeQuery(deleteQuery).executeUpdate();
         } else{
@@ -1293,19 +1295,21 @@ public class FleetService {
             }
         }
 
-        int siteCount=0;
-        for (VehicleTable site : driverVO.getSiteList()) {
-            try {
-                String siteFieldName = "xfcy" + siteCount++;
-                Field siteField = driver.getClass().getDeclaredField(siteFieldName);
-                siteField.setAccessible(true);
-                siteField.set(driver, site.getId());
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw e;
+        if(driverVO.getSiteList() != null) {
+            int siteCount = 0;
+            for (VehicleTable site : driverVO.getSiteList()) {
+                try {
+                    String siteFieldName = "xfcy" + siteCount++;
+                    Field siteField = driver.getClass().getDeclaredField(siteFieldName);
+                    siteField.setAccessible(true);
+                    siteField.set(driver, site.getId());
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw e;
+                }
             }
         }
 
-        if(driverVO.getXallvehicle()!=2) {
+        if(driverVO.getXallvehicle()!=2 && driverVO.getVehicleClassList() != null) {
             int vehicleClassCount = 0;
             for(VehicleTable vehicleClass : driverVO.getVehicleClassList()){
                 try {
@@ -1319,12 +1323,12 @@ public class FleetService {
             }
         }
 
-        if(!driverVO.getUnavailableDaysList().isEmpty()){
+        if(driverVO.getUnavailableDaysList() != null && !driverVO.getUnavailableDaysList().isEmpty()){
             driver.setXuvystrdat(driverVO.getUnavailableDaysList().get(0).getStartDate());
             driver.setXuvyenddat(driverVO.getUnavailableDaysList().get(0).getEndDate());
             driver.setXuvycod(driverVO.getUnavailableDaysList().get(0).getDesc());
         }
-        
+
         return driver;
     }
 
