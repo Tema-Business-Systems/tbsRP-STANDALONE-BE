@@ -471,6 +471,15 @@ public class FleetVehicle {
     @Column(name = "XRUTCDS_9")
     private int xrutcds9;
 
+    @Column(name="X10CSERSTA_0")
+    private Integer x10csersta_0;
+
+    @Column(name = "XVEHSTA_0")
+    private Integer xvehsta;
+
+    @Column(name = "XEXTERNAL_0")
+    private Integer xexternal;
+
     @PrePersist
     @PreUpdate
     public void setDefaultValues() throws IllegalAccessException {
@@ -480,9 +489,9 @@ public class FleetVehicle {
             if(column.get(this)==null){
                 if(column.getType().equals(String.class)){
                     column.set(this, "");
-                }else if(column.getType().equals(Integer.class)){
+                }else if(column.getType().equals(Integer.class) || column.getType().equals(int.class)){
                     column.set(this, 0);
-                }else if(column.getType().equals(Double.class)){
+                }else if(column.getType().equals(Double.class) || column.getType().equals(double.class)){
                     column.set(this, 0.0);
                 }else if(column.getType().equals(Date.class)){
                     column.set(this, new Date());

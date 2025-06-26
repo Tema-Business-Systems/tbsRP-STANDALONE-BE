@@ -187,24 +187,26 @@ public class FleetService {
         }
 
         int routeRenewalCount=0;
-        for(RouteRenewal routeRenewal: vehicleVO.getRouteRenewalsList()){
-            try {
-                String depotName = "depotName" + routeRenewalCount;
-                String serviceTime = "serviceTime" + routeRenewalCount++;
-                Field depotNameField = vehicle.getClass().getDeclaredField(depotName);
-                Field serviceTimeField = vehicle.getClass().getDeclaredField(serviceTime);
-                depotNameField.setAccessible(true);
-                depotNameField.set(vehicle, routeRenewal.getSite());
-                serviceTimeField.setAccessible(true);
-                serviceTimeField.set(vehicle, routeRenewal.getServiceTime());
-            }catch (NoSuchFieldException | IllegalAccessException e) {
-                throw e;
+        List<RouteRenewal> routeRenewals=vehicleVO.getRouteRenewalsList();
+        if(routeRenewals != null) {
+            for (RouteRenewal routeRenewal : routeRenewals) {
+                try {
+                    String depotName = "depotName" + routeRenewalCount;
+                    String serviceTime = "serviceTime" + routeRenewalCount++;
+                    Field depotNameField = vehicle.getClass().getDeclaredField(depotName);
+                    Field serviceTimeField = vehicle.getClass().getDeclaredField(serviceTime);
+                    depotNameField.setAccessible(true);
+                    depotNameField.set(vehicle, routeRenewal.getSite());
+                    serviceTimeField.setAccessible(true);
+                    serviceTimeField.set(vehicle, routeRenewal.getServiceTime());
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw e;
+                }
             }
         }
-
         vehicle.setAllDriver(vehicleVO.getAllDriverFlag());
 
-        if(vehicleVO.getAllDriverFlag()!=2) {
+        if(vehicleVO.getAllDriverFlag()!=2 && vehicleVO.getDriverIds() != null) {
             int driversCount = 0;
             for (VehicleTable driver : vehicleVO.getDriverIds()) {
                 try {
@@ -220,7 +222,7 @@ public class FleetService {
 
         vehicle.setAllBPCNum(vehicleVO.getAllCustomerFlag());
 
-        if(vehicleVO.getAllCustomerFlag()!=2) {
+        if(vehicleVO.getAllCustomerFlag()!=2 && vehicleVO.getCustomerIds() != null) {
             int customerCount = 0;
             for (VehicleTable customer : vehicleVO.getCustomerIds()) {
                 try {
@@ -236,7 +238,7 @@ public class FleetService {
 
         vehicle.setAllTclCod(vehicleVO.getAllCategoryFlag());
 
-        if(vehicleVO.getAllCategoryFlag()!=2) {
+        if(vehicleVO.getAllCategoryFlag()!=2 && vehicleVO.getCategoryIds() != null) {
             int categoryCount = 0;
             for (VehicleTable category : vehicleVO.getCategoryIds()) {
                 try {
@@ -252,7 +254,7 @@ public class FleetService {
 
         vehicle.setXallrutcds(vehicleVO.getXallrutcds());
 
-        if(vehicleVO.getXallrutcds()!=2) {
+        if(vehicleVO.getXallrutcds()!=2 && vehicleVO.getRoutesList() != null) {
             int routeCount = 0;
             for (Integer route : vehicleVO.getRoutesList()) {
                 try {
@@ -267,36 +269,38 @@ public class FleetService {
         }
 
         int inspCount = 0;
-        for (TechnicalInspection inspection : vehicleVO.getTechnicalInspectionList()) {
-            try {
-                String insType = "xinsptyp" + inspCount;
-                String lastCheck = "xlstchk" + inspCount;
-                String periodicity = "xperiodicity"+inspCount;
-                String nextVisit = "xnextvisit"+inspCount;
-                String type = "xtypein"+inspCount;
-                Field insTypeField = vehicle.getClass().getDeclaredField(insType);
-                Field lastCheckField = vehicle.getClass().getDeclaredField(lastCheck);
-                Field periodicityField = vehicle.getClass().getDeclaredField(periodicity);
-                Field nextVisitField = vehicle.getClass().getDeclaredField(nextVisit);
-                Field typeField = vehicle.getClass().getDeclaredField(type);
+        List<TechnicalInspection> inspectionList = vehicleVO.getTechnicalInspectionList();
+        if(inspectionList != null) {
+            for (TechnicalInspection inspection : inspectionList) {
+                try {
+                    String insType = "xinsptyp" + inspCount;
+                    String lastCheck = "xlstchk" + inspCount;
+                    String periodicity = "xperiodicity" + inspCount;
+                    String nextVisit = "xnextvisit" + inspCount;
+                    String type = "xtypein" + inspCount;
+                    Field insTypeField = vehicle.getClass().getDeclaredField(insType);
+                    Field lastCheckField = vehicle.getClass().getDeclaredField(lastCheck);
+                    Field periodicityField = vehicle.getClass().getDeclaredField(periodicity);
+                    Field nextVisitField = vehicle.getClass().getDeclaredField(nextVisit);
+                    Field typeField = vehicle.getClass().getDeclaredField(type);
 
-                insTypeField.setAccessible(true);
-                lastCheckField.setAccessible(true);
-                periodicityField.setAccessible(true);
-                nextVisitField.setAccessible(true);
-                typeField.setAccessible(true);
+                    insTypeField.setAccessible(true);
+                    lastCheckField.setAccessible(true);
+                    periodicityField.setAccessible(true);
+                    nextVisitField.setAccessible(true);
+                    typeField.setAccessible(true);
 
-                insTypeField.set(vehicle, inspection.getInspectionType());
-                lastCheckField.set(vehicle, inspection.getLastCheck());
-                periodicityField.set(vehicle, inspection.getPeriodicity());
-                nextVisitField.set(vehicle, inspection.getNextVisit());
-                typeField.set(vehicle, inspection.getType());
+                    insTypeField.set(vehicle, inspection.getInspectionType());
+                    lastCheckField.set(vehicle, inspection.getLastCheck());
+                    periodicityField.set(vehicle, inspection.getPeriodicity());
+                    nextVisitField.set(vehicle, inspection.getNextVisit());
+                    typeField.set(vehicle, inspection.getType());
 
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw e;
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw e;
+                }
             }
         }
-
         return vehicle;
     }
 
