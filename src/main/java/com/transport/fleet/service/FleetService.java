@@ -19,6 +19,14 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.Base64;
+
+
 
 @Service
 @Transactional
@@ -306,16 +314,320 @@ public class FleetService {
 
     public List<FleetVehicleVO> getAllVehicles() throws IllegalAccessException {
         List<FleetVehicleVO> vehicleVOList = new ArrayList<>();
+        long start=System.currentTimeMillis();
         List<FleetVehicle> vehicles = vehicleRepository.findAll();
+        System.out.println("Time to fetch DB records: " + (System.currentTimeMillis() - start) + " ms");
+        start = System.currentTimeMillis();
         for(FleetVehicle vehicle: vehicles){
             vehicleVOList.add(getVehicleResponse(vehicle));
         }
+        System.out.println("Time to map VO objects: " + (System.currentTimeMillis() - start) + " ms");
         return vehicleVOList;
     }
 
     public FleetVehicleVO getVehicleByCodeyve(String codeyve) throws IllegalAccessException {
         FleetVehicle vehicle = vehicleRepository.findByCodeyve(codeyve);
-        return getVehicleResponse(vehicle);
+        if (vehicle == null) {
+            return null;
+        }
+        Map<String, String> siteMap = commonRepository.getSiteList().stream()
+                .collect(Collectors.toMap(
+                        d -> String.valueOf(d.getValue()),
+                        DropdownData::getLabel,
+                        (existing, replacement) -> existing
+                ));
+        Map<String, String> driverMap = commonRepository.getDriverList().stream()
+                .collect(Collectors.toMap(
+                        d -> String.valueOf(d.getValue()),
+                        DropdownData::getLabel,
+                        (existing, replacement) -> existing
+                ));
+        Map<String, String> customerMap = commonRepository.getCustomerList().stream()
+                .collect(Collectors.toMap(
+                        d -> String.valueOf(d.getValue()),
+                        DropdownData::getLabel,
+                        (existing, replacement) -> existing
+                ));
+
+        Map<String, String> categoryMap = commonRepository.getCategoryList().stream()
+                .collect(Collectors.toMap(
+                        d -> String.valueOf(d.getValue()),
+                        DropdownData::getLabel,
+                        (existing, replacement) -> existing
+                ));
+        return getVehicleResponse1(vehicle, siteMap, driverMap, customerMap, categoryMap);
+    }
+
+    public List<FleetVehicleVO> getAllVehicles1() throws IllegalAccessException {
+        List<FleetVehicle> vehicles = vehicleRepository.findAll();
+
+        Map<String, String> siteMap = commonRepository.getSiteList().stream()
+                .collect(Collectors.toMap(d -> (String) d.getValue(), DropdownData::getLabel));
+
+        Map<String, String> driverMap = commonRepository.getDriverList().stream()
+                .collect(Collectors.toMap(d -> (String) d.getValue(), DropdownData::getLabel));
+
+        Map<String, String> customerMap = commonRepository.getCustomerList().stream()
+                .collect(Collectors.toMap(d -> (String) d.getValue(), DropdownData::getLabel));
+
+        Map<String, String> categoryMap = commonRepository.getCategoryList().stream()
+                .collect(Collectors.toMap(d -> (String) d.getValue(), DropdownData::getLabel));
+
+        List<String> vehicleCodes = vehicles.stream()
+                .map(FleetVehicle::getCodeyve)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        Map<String, byte[]> imageMap = getVehicleImageMap(vehicleCodes);
+
+        List<FleetVehicleVO> vehicleVOList = new ArrayList<>();
+        for (FleetVehicle vehicle : vehicles) {
+            FleetVehicleVO vo = getVehicleResponse1(vehicle, siteMap, driverMap, customerMap, categoryMap);
+            byte[] imageBytes = imageMap.get(vehicle.getCodeyve());
+            if (imageBytes != null) {
+                String base64Image = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(imageBytes);
+                vo.setImage(base64Image);
+            } else {
+                vo.setImage(null);
+            }
+            vehicleVOList.add(vo);
+        }
+
+
+        return vehicleVOList;
+    }
+    private FleetVehicleVO getVehicleResponse1(
+            FleetVehicle vehicle,
+            Map<String, String> siteMap,
+            Map<String, String> driverMap,
+            Map<String, String> customerMap,
+            Map<String, String> categoryMap
+    ) throws IllegalAccessException {
+        FleetVehicleVO vehicleVO = new FleetVehicleVO();
+        if(vehicle==null){
+            return null;
+        }
+
+        vehicleVO.setRowId(vehicle.getRowId());
+        vehicleVO.setCode(vehicle.getCodeyve());
+        vehicleVO.setRegistration(vehicle.getName());
+        vehicleVO.setSite(vehicle.getFcy());
+        vehicleVO.setVehicleClass(vehicle.getCategory());
+        vehicleVO.setActiveFlag(vehicle.getXacvflg());
+        vehicleVO.setOwnership(vehicle.getOwnerShip());
+        vehicleVO.setTrailer(vehicle.getTrailer());
+        vehicleVO.setCarrier(vehicle.getBptNum());
+        vehicleVO.setStartDepotName(vehicle.getStartdepotn());
+        vehicleVO.setEndDepotName(vehicle.getEnddepotname());
+        vehicleVO.setBrand(vehicle.getBrand());
+        vehicleVO.setModel(vehicle.getModel());
+        vehicleVO.setColor(vehicle.getColor());
+        vehicleVO.setFuelType(vehicle.getFuelType());
+        vehicleVO.setLocation(vehicle.getCodeyve());
+        vehicleVO.setEngineCC(vehicle.getEngicc());
+        vehicleVO.setChasisNum(vehicle.getChasnum());
+        vehicleVO.setYearOfManufacture(vehicle.getXyearofman());
+        vehicleVO.setPerformance(vehicle.getXper());
+        vehicleVO.setInsuranceAmountYearly(vehicle.getInsYear());
+        vehicleVO.setRoadTaxAmountYearly(vehicle.getRoaYear());
+        vehicleVO.setEmptyVehicleMass(vehicle.getEmptmass());
+        vehicleVO.setGrossVehicleMass(vehicle.getGromass());
+        vehicleVO.setTolerance(vehicle.getXtolerance());
+        vehicleVO.setSkillCriteria(vehicle.getX10cskillcri());
+        vehicleVO.setLoadingTime(vehicle.getStartdepots());
+        vehicleVO.setOffloadingTime(vehicle.getEnddepotserv());
+        vehicleVO.setEarliestStartTime(vehicle.getEarliestStart());
+        vehicleVO.setLatestStartTime(vehicle.getLatestStart());
+        vehicleVO.setAvailableHours(vehicle.getOvertTimeStart());
+        vehicleVO.setCostPerUnitOverTime(vehicle.getCostPerUnitO());
+        vehicleVO.setCostPerUnitDistance(vehicle.getCostPerUnitD());
+        vehicleVO.setCostPerUnitTime(vehicle.getCostPerUnitT());
+        vehicleVO.setFixedCost(vehicle.getFixedCost());
+        vehicleVO.setTotalMaxDistance(vehicle.getMaxTotalDist());
+        vehicleVO.setMaxTotalTime(vehicle.getMaxTotalTime());
+        vehicleVO.setMaxTotalTravelTime(vehicle.getMaxTotalTrav());
+        vehicleVO.setMaxSpeed(vehicle.getXmaxspeed());
+        vehicleVO.setOverTimeHrs(vehicle.getX1coverhrs());
+        vehicleVO.setMaxAllowedWeight(vehicle.getCapacities());
+        vehicleVO.setMaxAllowedVolume(vehicle.getVol());
+        vehicleVO.setQuantity(vehicle.getQty());
+        vehicleVO.setMaxOrderCount(vehicle.getMaxOrderCOU());
+        vehicleVO.setNoOfPallets(vehicle.getXnbpallet());
+        vehicleVO.setStackHeight(vehicle.getXbathght());
+        vehicleVO.setSurfaceSol(vehicle.getXgndocc());
+        vehicleVO.setVehicleFuelCapacity(vehicle.getXvfcap());
+        vehicleVO.setVehicleFuelUnits(vehicle.getXvfcu());
+        vehicleVO.setCurrentDriver(vehicle.getXcuralldri());
+        vehicleVO.setDate(vehicle.getXdate());
+        vehicleVO.setTime(vehicle.getXtime());
+        vehicleVO.setCo2Coef(vehicle.getCo2em());
+        vehicleVO.setUnavailable(vehicle.getUvycod());
+        vehicleVO.setStyle(vehicle.getStyzon());
+        vehicleVO.setCurrentOdometerReading(vehicle.getXcodometer());
+        vehicleVO.setLastUpdateTime(vehicle.getXlasttime());
+        vehicleVO.setLastUpdateDate(vehicle.getXlastdate());
+        vehicleVO.setReference(vehicle.getReference());
+        vehicleVO.setLastInsp(vehicle.getLastinsp());
+        vehicleVO.setExpiryInsp(vehicle.getInspexp());
+        vehicleVO.setVehicleAllocationInsp(vehicle.getXdelinspec());
+        vehicleVO.setReturnVehicleInsp(vehicle.getXretinspec());
+        vehicleVO.setGpsTrackerId(vehicle.getGpsId());
+        vehicleVO.setRefGMSmobile(vehicle.getMobtrac());
+        //todo
+        //vehicleVO.setTrackingWebServices(vehicle.getXx10ct);
+        vehicleVO.setMobileRadio(vehicle.getMobrad());
+        vehicleVO.setFireExtinguisher(vehicle.getFireExit());
+        vehicleVO.setEquipmentNotes(vehicle.getEquipnot());
+        vehicleVO.setAsset(vehicle.getAasref());
+        vehicleVO.setReference(vehicle.getLicref());
+        vehicleVO.setExpiration(vehicle.getLicexp());
+        vehicleVO.setNote(vehicle.getLicnot());
+        vehicleVO.setSupplier(vehicle.getVendor());
+        vehicleVO.setInsuranceExpiration(vehicle.getInsexp());
+        vehicleVO.setReference(vehicle.getInsref());
+        vehicleVO.setInsuranceNote(vehicle.getInsnot());
+
+        /*String IMAGE_QUERY = "SELECT BLOB_0 FROM "+dbSchema+".CBLOB WHERE CODBLB_0= :codblob_0 AND IDENT2_0='IMG1' AND IDENT1_0 = :ident1_0";
+
+        Query query = entityManager.createNativeQuery(IMAGE_QUERY);
+        query.setParameter("codblob_0", "XX10CVEH");
+        query.setParameter("ident1_0", vehicle.getCodeyve());
+
+        try {
+            Object blob = query.getSingleResult();
+            vehicleVO.setImage(blob!=null?(byte[]) blob: null);
+        } catch (NoResultException e) {
+            vehicleVO.setImage(null);
+        }*/
+
+        List<RouteRenewal> routeRenewals = new ArrayList<>();
+        for (int i = 0; i <= 9; i++) {
+            String depotNameField = "depotName" + i;
+            String serviceTimeField = "serviceTime" + i;
+            String depotName = getFieldValue(vehicle, depotNameField)!=null? (String) getFieldValue(vehicle, depotNameField) :"";
+            Double serviceTime = getFieldValue(vehicle, serviceTimeField)!=null? (Double) getFieldValue(vehicle, serviceTimeField) : null;
+
+            String siteDesc = siteMap.getOrDefault(depotName, "");
+
+            if (depotName != null && serviceTime != null && !depotName.trim().isEmpty()) {
+                routeRenewals.add(new RouteRenewal(depotName,siteDesc, serviceTime));
+            }
+        }
+        vehicleVO.setRouteRenewalsList(routeRenewals);
+
+        List<VehicleTable> driversList = new ArrayList<>();
+        vehicleVO.setAllDriverFlag(vehicle.getAllDriver());
+        if(vehicle.getAllDriver()!=2) {
+            for (int i = 0; i <= 9; i++) {
+                String driverIdField = "driverId" + i;
+                String driverId = getFieldValue(vehicle, driverIdField) != null ?
+                        (String) getFieldValue(vehicle, driverIdField) : "";
+
+                String driverDesc = driverMap.getOrDefault(driverId, "");
+
+                if (driverId != null && !driverId.trim().isEmpty() ) {
+                    driversList.add(new VehicleTable(driverId, driverDesc));
+                }
+            }
+            vehicleVO.setDriverIds(driversList);
+        }else{
+            vehicleVO.setDriverIds(driversList);
+        }
+
+        List<VehicleTable> customersList = new ArrayList<>();
+        vehicleVO.setAllCustomerFlag(vehicle.getAllBPCNum());
+        if(vehicle.getAllBPCNum()!=2) {
+            for (int i = 0; i <= 9; i++) {
+                String customersField = "bpcNum" + i;
+                String customerId = getFieldValue(vehicle, customersField) != null ?
+                        (String) getFieldValue(vehicle, customersField) : "";
+
+                String customerDesc = customerMap.getOrDefault(customerId, "");
+
+                if (customerId != null && !customerId.trim().isEmpty()) {
+                    customersList.add(new VehicleTable(customerId,customerDesc));
+                }
+            }
+            vehicleVO.setCustomerIds(customersList);
+        }else{
+            vehicleVO.setCustomerIds(customersList);
+        }
+
+        List<VehicleTable> categoryList = new ArrayList<>();
+        vehicleVO.setAllCategoryFlag(vehicle.getAllTclCod());
+        if(vehicle.getAllTclCod()!=2) {
+            for (int i = 0; i <= 9; i++) {
+                String categoryField = "tclcod" + i;
+                String categoryId = getFieldValue(vehicle, categoryField) != null ?
+                        (String) getFieldValue(vehicle, categoryField) : "";
+
+                String categoryDesc = categoryMap.getOrDefault(categoryId, "");
+
+                if (categoryId != null && !categoryId.trim().isEmpty()) {
+                    categoryList.add(new VehicleTable(categoryId,categoryDesc));
+                }
+            }
+            vehicleVO.setCategoryIds(categoryList);
+        }else{
+            vehicleVO.setCategoryIds(categoryList);
+        }
+
+        List<Integer> routeList = new ArrayList<>();
+        vehicleVO.setXallrutcds(vehicle.getXallrutcds());
+        if(vehicle.getXallrutcds()!=2) {
+            for (int i = 0; i <= 9; i++) {
+                String routeField = "xrutcds" + i;
+                Integer routeFieldValue = (Integer) getFieldValue(vehicle, routeField);
+                if (routeFieldValue!=null && routeFieldValue!=0) {
+                    routeList.add(routeFieldValue);
+                }
+            }
+            vehicleVO.setRoutesList(routeList);
+        }else{
+            vehicleVO.setRoutesList(routeList);
+        }
+
+        List<TechnicalInspection> technicalInspectionList = new ArrayList<>();
+        for (int i = 0; i <= 3; i++) {
+            String insTypeField = "xinsptyp" + i;
+            String lastCheckField = "xlstchk" + i;
+            String periodicityField = "xperiodicity"+i;
+            String nextVisitField = "xnextvisit"+i;
+            String typeField = "xtypein"+i;
+            String insType = getFieldValue(vehicle, insTypeField)!=null? (String) getFieldValue(vehicle, insTypeField) :"";
+            Date lastCheck = getFieldValue(vehicle, lastCheckField)!=null? (Date) getFieldValue(vehicle, lastCheckField) :null;
+            Integer periodicity = getFieldValue(vehicle, periodicityField)!=null? (int) getFieldValue(vehicle, periodicityField) :null;
+            Date nextVisit = getFieldValue(vehicle, nextVisitField)!=null? (Date) getFieldValue(vehicle, nextVisitField) :null;
+            Integer type = getFieldValue(vehicle, typeField)!=null? (int) getFieldValue(vehicle, typeField) :null;
+
+            technicalInspectionList.add(new TechnicalInspection(insType,lastCheck, periodicity,nextVisit,type));
+        }
+        vehicleVO.setTechnicalInspectionList(technicalInspectionList);
+
+        vehicleVO.setTransactionHistoryList(getTransactionHistoryListByVehicleCode(vehicle.getCodeyve()));
+
+        return vehicleVO;
+    }
+
+    private Map<String, byte[]> getVehicleImageMap(List<String> vehicleCodes) {
+        String sql = "SELECT IDENT1_0, BLOB_0 FROM " + dbSchema + ".CBLOB " +
+                "WHERE CODBLB_0 = :codblob_0 AND IDENT2_0 = 'IMG1' " +
+                "AND IDENT1_0 IN :ident1_0_list";
+
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter("codblob_0", "XX10CVEH");
+        query.setParameter("ident1_0_list", vehicleCodes);
+
+        List<Object[]> results = query.getResultList();
+        Map<String, byte[]> imageMap = new HashMap<>();
+
+        for (Object[] row : results) {
+            String ident1 = (String) row[0];
+            byte[] blob = (byte[]) row[1];
+            imageMap.put(ident1, blob);
+        }
+
+        return imageMap;
     }
 
     private FleetVehicleVO getVehicleResponse(FleetVehicle vehicle) throws IllegalAccessException {
@@ -403,15 +715,19 @@ public class FleetService {
         vehicleVO.setReference(vehicle.getInsref());
         vehicleVO.setInsuranceNote(vehicle.getInsnot());
 
-        String IMAGE_QUERY = "SELECT BLOB_0 FROM "+dbSchema+".CBLOB WHERE CODBLB_0= :codblob_0 AND IDENT2_0='IMG1' AND IDENT1_0 = :ident1_0";
-
+        String IMAGE_QUERY = "SELECT BLOB_0 FROM " + dbSchema + ".CBLOB WHERE CODBLB_0 = :codblob_0 AND IDENT2_0 = 'IMG1' AND IDENT1_0 = :ident1_0";
         Query query = entityManager.createNativeQuery(IMAGE_QUERY);
         query.setParameter("codblob_0", "XX10CVEH");
         query.setParameter("ident1_0", vehicle.getCodeyve());
 
         try {
             Object blob = query.getSingleResult();
-            vehicleVO.setImage(blob!=null?(byte[]) blob: null);
+            if (blob != null && blob instanceof byte[]) {
+                String base64Image = Base64.getEncoder().encodeToString((byte[]) blob);
+                vehicleVO.setImage(base64Image);
+            } else {
+                vehicleVO.setImage(null);
+            }
         } catch (NoResultException e) {
             vehicleVO.setImage(null);
         }

@@ -134,6 +134,12 @@
 			<version>0.0.20131108.vaadin1</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.15</version> <!-- or latest -->
+		</dependency>
+
 	</dependencies>
 
 	<build>

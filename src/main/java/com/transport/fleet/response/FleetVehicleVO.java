@@ -100,7 +100,8 @@ public class FleetVehicleVO {
     private String insuranceNote;
     private List<Document> documentList;
     private List<TransactionHistory> transactionHistoryList;
-    private byte[] image;
+//    private byte[] image;
+    private String image;
     private int xallrutcds;
     private List<Integer> routesList;
 

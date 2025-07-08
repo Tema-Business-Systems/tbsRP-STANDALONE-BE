@@ -44,7 +44,7 @@ public class FleetController {
 
     @GetMapping("/getAllVehicles")
     public ResponseEntity<Object> getAllVehicles() throws IllegalAccessException {
-        List<FleetVehicleVO> vehicles = service.getAllVehicles();
+        List<FleetVehicleVO> vehicles = service.getAllVehicles1();
         return ResponseEntity.ok(vehicles);
     }
 
