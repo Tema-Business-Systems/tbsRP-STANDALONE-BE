@@ -385,12 +385,7 @@ public class FleetService {
         for (FleetVehicle vehicle : vehicles) {
             FleetVehicleVO vo = getVehicleResponse1(vehicle, siteMap, driverMap, customerMap, categoryMap);
             byte[] imageBytes = imageMap.get(vehicle.getCodeyve());
-            if (imageBytes != null) {
-                String base64Image = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(imageBytes);
-                vo.setImage(base64Image);
-            } else {
-                vo.setImage(null);
-            }
+            vo.setImage(imageBytes);
             vehicleVOList.add(vo);
         }
 
@@ -724,8 +719,7 @@ public class FleetService {
         try {
             Object blob = query.getSingleResult();
             if (blob != null && blob instanceof byte[]) {
-                String base64Image = Base64.getEncoder().encodeToString((byte[]) blob);
-                vehicleVO.setImage(base64Image);
+                vehicleVO.setImage((byte[]) blob);
             } else {
                 vehicleVO.setImage(null);
             }

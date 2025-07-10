@@ -41,6 +41,12 @@ public class TransportController {
 
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
+    @GetMapping("/allDocs")
+    public List<DocsVO> getAllDocs() {
+        return transportService.getAllDocs();
+    }
+
+
     @GetMapping
     public String ping() {
         return "welcome to transport vehicles";

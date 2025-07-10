@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.transport.tracking.k.mapper.DocsMapper;
 import com.transport.tracking.model.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -184,6 +185,12 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
 
 
     private static final String TRIPS_CACHE = "trips";
+
+    //Added by Shubham for fetching all data of XSCHDOCS table
+    public List<DocsVO> getAllDocs() {
+        List<Docs> docsList = (List<Docs>) docsRepository.findAll();  // cast since CrudRepository
+        return DocsMapper.toVOList(docsList);
+    }
 
     public List<VehicleVO> listTransports(String site, Boolean active) {
         log.info("Transport service is loaded...");
