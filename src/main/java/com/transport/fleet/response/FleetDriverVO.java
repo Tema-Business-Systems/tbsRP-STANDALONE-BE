@@ -72,7 +72,7 @@ public class FleetDriverVO {
     private int xdeposit;
     private int xgeocon;
     private int xnooftrips;
-    private int xsalerep;
+    private int xsalesrep;
     private int xdriver;
     private int xdsd;
     private int xsalrout;

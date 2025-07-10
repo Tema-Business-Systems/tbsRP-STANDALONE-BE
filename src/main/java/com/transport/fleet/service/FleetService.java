@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
@@ -1368,14 +1369,23 @@ public class FleetService {
     }
 
     private FleetDriver getDriverModelForCreateOrUpdate(FleetDriverVO driverVO, boolean isCreate) throws NoSuchFieldException, IllegalAccessException {
-        FleetDriver driver = new FleetDriver();
-
-        driver.setRowId(isCreate?null:driverVO.getRowId());
-        driver.setDriverId(driverVO.getDriverId());
+        FleetDriver driver;
+        if(isCreate){
+            driver= new FleetDriver();
+        } else {
+            driver=entityManager.find(FleetDriver.class, driverVO.getRowId());
+            if(driver==null) {
+                throw new EntityNotFoundException("Driver not found with this rowID: "+driverVO.getDriverId());
+            }
+        }
+        if (isCreate) {
+            driver.setDriverId(driverVO.getDriverId());
+        }
+        System.out.println("xsalerep = " + driver.getXsalerep());
         driver.setDriver(driverVO.getDriver());
         driver.setFcy(driverVO.getFcy());
         driver.setActive(driverVO.getActive());
-        driver.setXsalerep(driverVO.getXsalerep());
+        driver.setXsalesrep(driverVO.getXsalesrep());
         driver.setXdriver(driverVO.getXdriver());
         driver.setX10csup(driverVO.getX10csup());
         driver.setBptnum(driverVO.getBptnum());
@@ -1697,7 +1707,7 @@ public class FleetService {
         driverVO.setDriver(driver.getDriver());
         driverVO.setFcy(driver.getFcy());
         driverVO.setActive(driver.getActive());
-        driverVO.setXsalerep(driver.getXsalerep());
+        driverVO.setXsalesrep(driver.getXsalerep());
         driverVO.setXdriver(driver.getXdriver());
         driverVO.setX10csup(driver.getX10csup());
         driverVO.setBptnum(driver.getBptnum());
