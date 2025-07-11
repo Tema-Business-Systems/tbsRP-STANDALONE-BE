@@ -232,7 +232,7 @@ public class FleetController {
 
     @GetMapping("/getAllDriversList")
     public ResponseEntity<Object> getAllDriversList() throws IllegalAccessException {
-        List<FleetDriverVO> driversList = service.getAllDriversList();
+        List<FleetDriverVO> driversList = service.getAllDriversList1();
         return ResponseEntity.ok(driversList);
     }
 

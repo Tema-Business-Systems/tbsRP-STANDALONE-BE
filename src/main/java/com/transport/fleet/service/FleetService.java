@@ -1656,15 +1656,6 @@ public class FleetService {
         return driver;
     }
 
-    public List<FleetDriverVO> getAllDriversList() throws IllegalAccessException {
-        List<FleetDriver> driverList = driverRepository.findAll();
-        List<FleetDriverVO> fleetDriverVOList = new ArrayList<>();
-        for(FleetDriver driver: driverList){
-            fleetDriverVOList.add(getDriverResponse(driver));
-        }
-        return fleetDriverVOList;
-    }
-
     public FleetDriverVO getDriverById(String driverId) throws IllegalAccessException {
         FleetDriver driver = driverRepository.findByDriverId(driverId);
         return getDriverResponse(driver);
@@ -1690,6 +1681,165 @@ public class FleetService {
         return "success";
     }
 
+    //Optimized method for reducing time for response --Added by Shubham
+    public List<FleetDriverVO> getAllDriversList1() throws IllegalAccessException {
+        List<FleetDriver> driverList = driverRepository.findAll();
+        List<FleetDriverVO> fleetDriverVOList = new ArrayList<>();
+
+        Map<String, String> siteMap=commonRepository.getSiteList().stream().collect(Collectors.toMap(e -> (String) e.getValue(),DropdownData::getLabel));
+        Map<String, String> vehicleClassMap = commonRepository.getVehicleClassList().stream().collect(Collectors.toMap(e -> (String) e.getValue(), DropdownData::getLabel));
+        for(FleetDriver driver: driverList){
+            fleetDriverVOList.add(getDriverResponse1(driver, siteMap, vehicleClassMap));
+        }
+        return fleetDriverVOList;
+    }
+    public FleetDriverVO getDriverResponse1(FleetDriver driver,
+                                            Map<String, String> siteMap,
+                                            Map<String, String> vehicleClassMap) throws IllegalAccessException {
+        FleetDriverVO driverVO = new FleetDriverVO();
+        if(driver==null){
+            return null;
+        }
+
+        driverVO.setRowId(driver.getRowId());
+        driverVO.setDriverId(driver.getDriverId());
+        driverVO.setDriver(driver.getDriver());
+        driverVO.setFcy(driver.getFcy());
+        driverVO.setActive(driver.getActive());
+        driverVO.setXsalesrep(driver.getXsalerep());
+        driverVO.setXdriver(driver.getXdriver());
+        driverVO.setX10csup(driver.getX10csup());
+        driverVO.setBptnum(driver.getBptnum());
+        driverVO.setXbus(driver.getXbus());
+        driverVO.setLanmain(driver.getLanmain());
+        driverVO.setBir(driver.getBir());
+        driverVO.setLastvime(driver.getLastvime());
+        driverVO.setDelivby(driver.getDelivby());
+        driverVO.setXnooftrips(driver.getXnooftrips());
+        driverVO.setXper(driver.getXper());
+        driverVO.setLicenum(driver.getLicenum());
+        driverVO.setLicetyp(driver.getLicetyp());
+        driverVO.setLicedat(driver.getLicedat());
+        driverVO.setValidat(driver.getValidat());
+        driverVO.setXlncstarttim(driver.getXlncstarttim());
+        driverVO.setXlncdur(driver.getXlncdur());
+        driverVO.setStyzon(driver.getStyzon());
+        driverVO.setXuvycod(driver.getXuvycod());
+        driverVO.setBpaaddlig0(driver.getBpaaddlig0());
+        driverVO.setBpaaddlig2(driver.getBpaaddlig2());
+        driverVO.setBpaaddlig1(driver.getBpaaddlig1());
+        driverVO.setCry(driver.getCry());
+        driverVO.setPoscod(driver.getPoscod());
+        driverVO.setCty(driver.getCty());
+        driverVO.setSat(driver.getSat());
+        driverVO.setMob(driver.getMob());
+        driverVO.setTel0(driver.getTel0());
+        driverVO.setWeb(driver.getWeb());
+        driverVO.setXuser(driver.getXuser());
+        driverVO.setXpwd(driver.getXpwd());
+        driverVO.setXskpcon(driver.getXskpcon());
+        driverVO.setXrescon(driver.getXrescon());
+        driverVO.setXqtychgcon(driver.getXqtychgcon());
+        driverVO.setXspotcon(driver.getXspotcon());
+        driverVO.setXsihcon(driver.getXsihcon());
+        driverVO.setXpaycon(driver.getXpaycon());
+        driverVO.setXgeocon(driver.getXgeocon());
+        driverVO.setNote(driver.getNote());
+        driverVO.setXcondriv(driver.getXcondriv());
+        driverVO.setXlonghaul(driver.getXlonghaul());
+        driverVO.setX1cunion(driver.getX1cunion());
+        driverVO.setX1coverhrs(driver.getX1coverhrs());
+        driverVO.setXmaxhrsday(driver.getXmaxhrsday());
+        driverVO.setXmaxhrsweek(driver.getXmaxhrsweek());
+        driverVO.setXdriverhrs(driver.getXdriverhrs());
+        driverVO.setX10cmon(driver.getX10cmon());
+        driverVO.setX10ctues(driver.getX10ctues());
+        driverVO.setX10cwed(driver.getX10cwed());
+        driverVO.setX10cthu(driver.getX10cthu());
+        driverVO.setX10cfri(driver.getX10cfri());
+        driverVO.setX10csat(driver.getX10csat());
+        driverVO.setX10csun(driver.getX10csun());
+        driverVO.setXallvehicle(driver.getXallvehicle());
+        driverVO.setXdocno(driver.getXdocno());
+
+        //Image fetch
+        String IMAGE_QUERY = "SELECT BLOB_0 FROM "+dbSchema+".CBLOB WHERE CODBLB_0= :codblob_0  AND IDENT1_0 = :ident1_0";
+
+        Query imgQuery = entityManager.createNativeQuery(IMAGE_QUERY);
+        imgQuery.setParameter("codblob_0", "XX10CDR");
+        imgQuery.setParameter("ident1_0", driver.getDriverId());
+
+        try {
+            Object blob = imgQuery.getSingleResult();
+            driverVO.setImage(blob!=null?(byte[]) blob: null);
+        } catch (NoResultException e) {
+            driverVO.setImage(null);
+        }
+
+        //Document fetch
+        String queryString = "select GTPASS_0,  XDOCNO_0, ISSAUTHORITY_0, PASSDURATION_0, EXPDATE_0 , LINNUM_0" +
+                " from "+dbSchema+".XX10CDRIVERD where DRIVERID_0='"+driver.getDriverId()+"'";
+
+        Query query = entityManager.createNativeQuery(queryString);
+        List<Object[]> results = query.getResultList();
+        List<Document> documentList = results.stream()
+                .map(result -> new Document(
+                        result[0]!=null?result[0].toString():"",
+                        result[1]!=null?result[1].toString():"",
+                        result[2]!=null?result[2].toString():null,
+                        result[3]!=null?(Date) result[3]:null,
+                        result[4]!=null?(Date) result[4]:null,
+                        result[5]!=null?(Integer) result[5]:null
+                ))
+                .collect(Collectors.toList());
+        driverVO.setDocumentList(documentList);
+
+        //Site list optimization
+        List<VehicleTable> siteList = new ArrayList<>();
+        for (int i = 0; i <= 9; i++) {
+            String siteField = "xfcy" + i;
+            String site = getFieldValue(driver, siteField)!=null?
+                    (String) getFieldValue(driver, siteField) :"";
+
+            if(site != null && !site.trim().isEmpty()) {
+                siteList.add(new VehicleTable(site, siteMap.getOrDefault(site,"")));
+            }
+        }
+        driverVO.setSiteList(siteList);
+
+        //Vehicle Class Optimization
+        List<VehicleTable> vehicleClassList = new ArrayList<>();
+        if(driver.getXallvehicle()!=2){
+            for (int i = 0; i <= 9; i++) {
+                String vehicleClassField = "xvehicleclas" + i;
+                String vehicleClass = getFieldValue(driver, vehicleClassField)!=null?
+                        (String) getFieldValue(driver, vehicleClassField) :"";
+
+                if(vehicleClass != null && !vehicleClass.trim().isEmpty()){
+                    vehicleClassList.add(new VehicleTable(vehicleClass,vehicleClassMap.getOrDefault(vehicleClass,"")));
+                }
+            }
+        }
+        driverVO.setVehicleClassList(vehicleClassList);
+
+        //Unavailable days
+        Date startDate = getFieldValue(driver, "xuvystrdat")!=null?
+                (Date) getFieldValue(driver, "xuvystrdat") : null;
+        Date endDate = getFieldValue(driver, "xuvyenddat")!=null?
+                (Date) getFieldValue(driver, "xuvyenddat") : null;
+        driverVO.setUnavailableDaysList(Collections.singletonList(new UnavailableDays(startDate, endDate, "")));
+        return driverVO;
+    }
+
+
+    public List<FleetDriverVO> getAllDriversList() throws IllegalAccessException {
+        List<FleetDriver> driverList = driverRepository.findAll();
+        List<FleetDriverVO> fleetDriverVOList = new ArrayList<>();
+        for(FleetDriver driver: driverList){
+            fleetDriverVOList.add(getDriverResponse(driver));
+        }
+        return fleetDriverVOList;
+    }
     public FleetDriverVO getDriverResponse(FleetDriver driver) throws IllegalAccessException {
         FleetDriverVO driverVO = new FleetDriverVO();
         if(driver==null){
