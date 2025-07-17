@@ -1358,6 +1358,7 @@ public class FleetService {
         return driverRepository.existsByDriverId(driverId);
     }
 
+    @Transactional
     public FleetDriver createDriver(FleetDriverVO driverVO) throws NoSuchFieldException, IllegalAccessException {
          return driverRepository.save(getDriverModelForCreateOrUpdate(driverVO, true));
     }
@@ -1658,7 +1659,12 @@ public class FleetService {
 
     public FleetDriverVO getDriverById(String driverId) throws IllegalAccessException {
         FleetDriver driver = driverRepository.findByDriverId(driverId);
-        return getDriverResponse(driver);
+        if(driver == null) {
+            return null;
+        }
+        Map<String, String> siteMap = commonRepository.getSiteList().stream().collect(Collectors.toMap(e-> (String) e.getValue(), DropdownData::getLabel));
+        Map<String, String> vehicleClassMap = commonRepository.getVehicleClassList().stream().collect(Collectors.toMap(e -> (String) e.getValue(), DropdownData::getLabel));
+        return getDriverResponse1(driver, siteMap, vehicleClassMap);
     }
 
     public void updateDriver(FleetDriverVO driverVO) throws NoSuchFieldException, IllegalAccessException {
@@ -1706,7 +1712,7 @@ public class FleetService {
         driverVO.setDriver(driver.getDriver());
         driverVO.setFcy(driver.getFcy());
         driverVO.setActive(driver.getActive());
-        driverVO.setXsalesrep(driver.getXsalerep());
+        driverVO.setXsalesrep(driver.getXsalesrep());
         driverVO.setXdriver(driver.getXdriver());
         driverVO.setX10csup(driver.getX10csup());
         driverVO.setBptnum(driver.getBptnum());

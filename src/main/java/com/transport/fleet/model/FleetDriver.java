@@ -318,6 +318,8 @@ public class FleetDriver {
     private int x10csec;
     @Column(name = "XSALESREP_0")
     private int xsalesrep;
+    @Column(name = "XPRICEORRA_0")
+    private int xpriceorra;
 
     @PrePersist
     @PreUpdate
