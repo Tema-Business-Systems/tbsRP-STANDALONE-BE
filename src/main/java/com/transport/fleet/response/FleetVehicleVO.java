@@ -104,6 +104,4 @@ public class FleetVehicleVO {
 //    private String image;
     private int xallrutcds;
     private List<Integer> routesList;
-    private String xdelinspec;
-    private String xretinspec;
 }
