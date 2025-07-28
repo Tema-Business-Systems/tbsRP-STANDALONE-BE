@@ -356,7 +356,15 @@ public class FleetService {
                         DropdownData::getLabel,
                         (existing, replacement) -> existing
                 ));
-        return getVehicleResponse1(vehicle, siteMap, driverMap, customerMap, categoryMap);
+                FleetVehicleVO vo = getVehicleResponse1(vehicle, siteMap, driverMap, customerMap, categoryMap);
+                if(vo != null) {
+                    Map<String, byte[]> imageMap=getVehicleImageMap(Collections.singletonList(codeyve));
+                    byte[] image=imageMap.get(codeyve);
+                    if(image != null) {
+                        vo.setImage(image);
+                    }
+                }
+                return vo;
     }
 
     public List<FleetVehicleVO> getAllVehicles1() throws IllegalAccessException {
