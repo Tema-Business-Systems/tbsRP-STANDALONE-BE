@@ -313,7 +313,7 @@ public class FleetController {
     public ResponseEntity<Object> createAllocation(@RequestBody Allocation allocation) throws NoSuchFieldException, IllegalAccessException {
         if(allocation !=null){
             if(!service.checkAllocationExists(allocation.getTransactionNumber())) {
-                Allocation createdAllocation = service.createAllocation(allocation);
+                Allocation createdAllocation = service.createAllocation1(allocation);
                 return ResponseEntity.status(201).body(new HashMap<String, Object>() {{
                     put("message", "Allocation created successfully");
                     put("allocation", createdAllocation);
