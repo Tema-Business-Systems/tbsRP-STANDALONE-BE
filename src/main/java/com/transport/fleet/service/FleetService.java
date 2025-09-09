@@ -932,6 +932,8 @@ public class FleetService {
         trailer.setXstomgtcod(trailerVO.getXstomgtcod());
         trailer.setXlotmgtcod(trailerVO.getXlotmgtcod());
         trailer.setXseril(trailerVO.getXseril());
+        trailer.setXsermgtcod(trailerVO.getXsermgtcod());
+
 
         if(isCreate && trailerVO.getImage()!=null){
             String insertImage = "INSERT INTO " + dbSchema + ".CBLOB (" +
@@ -1083,6 +1085,7 @@ public class FleetService {
         trailerVO.setXstomgtcod(trailer.getXstomgtcod());
         trailerVO.setXlotmgtcod(trailer.getXlotmgtcod());
         trailerVO.setXseril(trailer.getXseril());
+        trailerVO.setXsermgtcod(trailer.getXsermgtcod());
 
         String IMAGE_QUERY = "SELECT BLOB_0 FROM "+dbSchema+".CBLOB WHERE CODBLB_0= :codblob_0 AND IDENT1_0 = :ident1_0";
 

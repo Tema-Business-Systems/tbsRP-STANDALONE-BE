@@ -261,4 +261,34 @@ public class Facility {
       private BigDecimal rowid;
       @Column(name = "XTMSFCY_0")
       private int fcyNumber;
+      @Column(name = "EORINUM_0")
+      private String eorinum;
+
+      @Column(name = "SERVICEID_0")
+      private String serviceid;
+
+      @Column(name = "XLOANFCY_0")
+      private String xloanfcy;
+
+      @Column(name = "XUPDVIA_0")
+      private Short xupdvia;
+
+      @Column(name = "XUPDUSR_0")
+      private String xupdusr;
+
+      @Column(name = "XUPDDATE_0")
+      private Date xupddate;
+
+      @Column(name = "X1CGEOSO_0")
+      private Short x1cgeoso;
+
+      @Column(name = "XADD_0")
+      private String xadd;
+
+      @Column(name = "XADDDES_0")
+      private String xadddes;
+
+      @Column(name = "XBASEPRLLST_0")
+      private String xbaseprllst;
+
 }
