@@ -356,7 +356,15 @@ public class FleetService {
                         DropdownData::getLabel,
                         (existing, replacement) -> existing
                 ));
-        return getVehicleResponse1(vehicle, siteMap, driverMap, customerMap, categoryMap);
+                FleetVehicleVO vo = getVehicleResponse1(vehicle, siteMap, driverMap, customerMap, categoryMap);
+                if(vo != null) {
+                    Map<String, byte[]> imageMap=getVehicleImageMap(Collections.singletonList(codeyve));
+                    byte[] image=imageMap.get(codeyve);
+                    if(image != null) {
+                        vo.setImage(image);
+                    }
+                }
+                return vo;
     }
 
     public List<FleetVehicleVO> getAllVehicles1() throws IllegalAccessException {
@@ -2144,12 +2152,31 @@ public class FleetService {
         return allocationRepository.existsByTransactionNumber(transactionNumber);
     }
 
+    //older method
     public Allocation createAllocation(Allocation allocation) {
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");
         String maxValueQuery = "select MAX(CAST(RIGHT(XTRANNO_0, 3) AS INT)) AS MaxValue from "+dbSchema+".XX10CALLOC";
 
         Integer maxValue = (Integer) entityManager.createNativeQuery(maxValueQuery).getSingleResult();
         allocation.setTransactionNumber("VA-"+allocation.getDriverId()+"-"+sdf.format(new Date())+"-"+String.format("%03d", maxValue+1));
+        return allocationRepository.save(allocation);
+    }
+
+    //added this method for resolving type conversion problem for transcation number--Added by Shubham
+    public Allocation createAllocation1(Allocation allocation) {
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");
+
+        String maxValueQuery = "SELECT MAX(CAST(RIGHT(XTRANNO_0, 3) AS INT)) " +
+                "FROM " + dbSchema + ".XX10CALLOC " +
+                "WHERE ISNUMERIC(RIGHT(XTRANNO_0, 3)) = 1";
+
+        Object result = entityManager.createNativeQuery(maxValueQuery).getSingleResult();
+        int maxValue = (result != null) ? ((Number) result).intValue() : 0;
+
+        String transactionNumber = "VA-" + allocation.getDriverId() + "-" +
+                sdf.format(new Date()) + "-" + String.format("%03d", maxValue + 1);
+
+        allocation.setTransactionNumber(transactionNumber);
         return allocationRepository.save(allocation);
     }
 
