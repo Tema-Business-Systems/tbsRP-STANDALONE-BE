@@ -1,6 +1,7 @@
 package com.transport.tracking.k.controller;
 
 import com.transport.tracking.k.service.SiteService;
+import com.transport.tracking.response.SiteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,10 @@ public class SiteController {
     @PostMapping("/site")
     public ResponseEntity<Object> syncSites() {
         return siteService.syncSitesFromERP();
+    }
+
+    @PutMapping("/updateSite")
+    public ResponseEntity<?> updateSite(@RequestBody SiteDto request) {
+        return siteService.updateSite(request);
     }
 }

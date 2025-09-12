@@ -64,6 +64,9 @@ public class XtmsSite {
     @Column(name = "XADDDES_0")
     private String xadddes;
 
+    @Column(name = "LOCATEGEOBY")
+    private String locategeoby;
+
     @Id
     @Column(name = "ROWID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

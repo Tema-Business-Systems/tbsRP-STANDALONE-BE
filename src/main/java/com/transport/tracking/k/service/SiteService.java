@@ -81,6 +81,9 @@ public class SiteService {
             if(site == null) {
                 site=new XtmsSite();
             }
+            if("Manual".equalsIgnoreCase(site.getLocategeoby())) {
+                continue;
+            }
             site.setSiteId(facility.getFcy());
             site.setSiteName(facility.getFcynam());
             site.setFcysho(facility.getFcysho());
@@ -98,6 +101,7 @@ public class SiteService {
             site.setX1cgeoso(facility.getX1cgeoso());
             site.setXadd(facility.getXadd());
             site.setXadddes(facility.getXadddes());
+            site.setLocategeoby("Auto");
             xtmsSiteRepository.save(site);
         }
         long erpCount = facilityRepo.count();
@@ -110,6 +114,27 @@ public class SiteService {
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Sites synced successfully");
         response.put("data", counts);
+        return ResponseEntity.ok(response);
+    }
+
+    public ResponseEntity<Object> updateSite(SiteDto request) {
+        XtmsSite site = xtmsSiteRepository.findBySiteId(request.getSiteId());
+        if(site==null) {
+            return ResponseEntity.badRequest().body("Site with ID " + request.getSiteId() + " not found");
+        }
+
+        site.setLocategeoby("Manual");
+        site.setXupdusr(request.getXupdusr());
+        site.setXupdate(new java.util.Date());
+        site.setXx10cGeox(request.getXx10cGeox());
+        site.setXx10cGeoy(request.getXx10cGeoy());
+        site.setXtmsfcy(request.getXtmsfcy());
+
+        xtmsSiteRepository.save(site);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Site updated successfully");
+        response.put("data",convertToDto(site));
         return ResponseEntity.ok(response);
     }
 
@@ -132,6 +157,7 @@ public class SiteService {
         dto.setX1cgeoso(site.getX1cgeoso());
         dto.setXadd(site.getXadd());
         dto.setXadddes(site.getXadddes());
+        dto.setLocategeoby(site.getLocategeoby());
         dto.setRowid(site.getRowid());
         return dto;
     }

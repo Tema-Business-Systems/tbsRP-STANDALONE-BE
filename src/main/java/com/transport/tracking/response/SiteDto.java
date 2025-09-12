@@ -27,5 +27,6 @@ public class SiteDto {
     private Short x1cgeoso;
     private String xadd;
     private String xadddes;
+    private String locategeoby;
     private BigDecimal rowid;
 }
