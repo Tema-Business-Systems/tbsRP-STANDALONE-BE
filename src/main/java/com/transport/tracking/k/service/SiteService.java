@@ -123,7 +123,7 @@ public class SiteService {
             return ResponseEntity.badRequest().body("Site with ID " + request.getSiteId() + " not found");
         }
 
-        site.setLocategeoby("Manual");
+        site.setLocategeoby(request.getLocategeoby());
         site.setXupdusr(request.getXupdusr());
         site.setXupdate(new java.util.Date());
         site.setXx10cGeox(request.getXx10cGeox());

@@ -15,6 +15,7 @@ public interface UserRepository extends CrudRepository<User, String> {
     public User findByXusrnameAndXpswd(String userName, String password);
 
     public User findByXloginAndXpswdAndXact(String userName, String password, int x);
+    public User findByXloginAndXpswd(String userName, String password);
 
     @Query("SELECT u FROM User u")
     public List<User> findAll();

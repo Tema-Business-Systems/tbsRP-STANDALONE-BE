@@ -32,11 +32,14 @@ public class UserController {
     @Anonymous
     public @ResponseBody ResponseEntity<Object> login(@RequestBody UserVO userVO, HttpServletResponse response) {
         log.info("UserVO  ======== ", userVO);
-        userVO = userService.login(userVO, response);
-        if(Objects.isNull(userVO)) {            Map<String, String> map = new HashMap<>();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map.put("message", "error"));
+        try {
+            UserVO result = userService.login(userVO, response);
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException ex) {
+            Map<String, String> error= new HashMap<>();
+            error.put("message",ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(userVO);
     }
 
     @GetMapping ("/logout")

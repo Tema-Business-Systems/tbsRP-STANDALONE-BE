@@ -37,11 +37,13 @@ public class UserService {
     private String dbSchema;
 
     public UserVO login(@NotNull UserVO userVO, HttpServletResponse response) {
-        //User user = this.userRepository.findByXusrnameAndXpswd(userVO.getXusrname(), userVO.getXpswd());
-        User user = this.userRepository.findByXloginAndXpswdAndXact(userVO.getXlogin(), userVO.getXpswd(),2);
+        User user = this.userRepository.findByXloginAndXpswd(userVO.getXlogin(), userVO.getXpswd());
+//        User user = this.userRepository.findByXloginAndXpswdAndXact(userVO.getXlogin(), userVO.getXpswd(),2);
         if(Objects.isNull(user)) {
-
-            return null;
+            throw new RuntimeException("User not found or password is wrong");
+        }
+        if(user.getXact()!=2) {
+            throw new RuntimeException("User is not active");
         }
         userVO = new UserVO();
         userVO.setXusrname(user.getXusrname());
@@ -55,6 +57,7 @@ public class UserService {
         userVO.setUsermgmtflg(user.getUsermgmtflg());
         userVO.setRemovePicktcktflg(user.getRemovePicktcktflg());
         userVO.setAddPicktcktflg(user.getAddPicktcktflg());
+        userVO.setXact(user.getXact());
         //Set<Role> roles = user.getRoles();
 
         List<String> permissions = new ArrayList();
