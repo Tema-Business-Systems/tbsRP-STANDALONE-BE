@@ -1,11 +1,7 @@
-package com.transport.tracking.repository;
+package com.transport.sync.syncRepo;
 
-import com.transport.tracking.model.XtmsSite;
-import org.springframework.data.jpa.repository.Query;
+import com.transport.sync.syncModel.XtmsSite;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface XtmsSiteRepository extends CrudRepository<XtmsSite, String> {
 //    List<XtmsSite> findByOrderBySiteNameAsc();

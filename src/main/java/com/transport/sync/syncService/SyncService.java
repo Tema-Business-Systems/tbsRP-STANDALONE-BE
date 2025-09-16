@@ -1,37 +1,43 @@
-package com.transport.tracking.k.service;
+package com.transport.sync.syncService;
 
+import com.transport.sync.syncMapper.SyncMapper;
 import com.transport.tracking.model.Facility;
-import com.transport.tracking.model.XtmsSite;
+import com.transport.sync.syncModel.XtmsSite;
 import com.transport.tracking.repository.FacilityRepository;
-import com.transport.tracking.repository.XtmsSiteRepository;
-import com.transport.tracking.response.SiteDto;
+import com.transport.sync.syncRepo.XtmsSiteRepository;
+import com.transport.sync.syncDto.SiteDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class SiteService {
+public class SyncService implements IsyncService{
     private final FacilityRepository facilityRepo;
     private final XtmsSiteRepository xtmsSiteRepository;
 
-    public SiteService(FacilityRepository facilityRepo, XtmsSiteRepository xtmsSiteRepository) {
+    public SyncService(FacilityRepository facilityRepo, XtmsSiteRepository xtmsSiteRepository) {
         this.facilityRepo = facilityRepo;
         this.xtmsSiteRepository = xtmsSiteRepository;
     }
+
+    @Override
     public ResponseEntity<Object> getAllXtmsSites() {
         List<XtmsSite> sites = (List<XtmsSite>) xtmsSiteRepository.findAll();
         List<SiteDto> dtos = sites.stream()
-                .map(this::convertToDto)
+                .map(SyncMapper::toDto)
                 .collect(Collectors.toList());
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Sites fetched successfully");
         response.put("data", dtos);
         return ResponseEntity.ok(response);
     }
+
+    @Override
     public ResponseEntity<Object> getAllSyncData() {
         Map<String, Object> data = new HashMap<>();
         long erpCount = facilityRepo.count();
@@ -74,8 +80,10 @@ public class SiteService {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     public ResponseEntity<Object> syncSitesFromERP() {
         List<Facility> erpSites = (List<Facility>) facilityRepo.findAll();
+        List<XtmsSite> sitesToSave = new ArrayList<>();
         for(Facility facility: erpSites) {
             XtmsSite site = xtmsSiteRepository.findBySiteId(facility.getFcy());
             if(site == null) {
@@ -84,26 +92,10 @@ public class SiteService {
             if("Manual".equalsIgnoreCase(site.getLocategeoby())) {
                 continue;
             }
-            site.setSiteId(facility.getFcy());
-            site.setSiteName(facility.getFcynam());
-            site.setFcysho(facility.getFcysho());
-            site.setCry(facility.getCry());
-            site.setBpaadd(facility.getBpaadd());
-            site.setUpdusr(facility.getUpdusr());
-            site.setUpddat(facility.getUpddat());
-            site.setCredattim(facility.getCredattim());
-            site.setUpddattim(facility.getUpddattim());
-            site.setXx10cGeox(facility.getXx10c_geox());
-            site.setXx10cGeoy(facility.getXx10c_geoy());
-            site.setXtmsfcy(facility.getFcyNumber());
-            site.setXupdusr(facility.getUpdusr());
-            site.setXupdate(facility.getUpddat());
-            site.setX1cgeoso(facility.getX1cgeoso());
-            site.setXadd(facility.getXadd());
-            site.setXadddes(facility.getXadddes());
-            site.setLocategeoby("Auto");
-            xtmsSiteRepository.save(site);
+            SyncMapper.updateEntityFromFacility(facility, site);
+            sitesToSave.add(site);
         }
+        xtmsSiteRepository.saveAll(sitesToSave);
         long erpCount = facilityRepo.count();
         long tmsCount = xtmsSiteRepository.count();
 
@@ -117,48 +109,20 @@ public class SiteService {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     public ResponseEntity<Object> updateSite(SiteDto request) {
         XtmsSite site = xtmsSiteRepository.findBySiteId(request.getSiteId());
         if(site==null) {
             return ResponseEntity.badRequest().body("Site with ID " + request.getSiteId() + " not found");
         }
 
-        site.setLocategeoby(request.getLocategeoby());
-        site.setXupdusr(request.getXupdusr());
+        SyncMapper.updateEntityFromDto(request, site);
         site.setXupdate(new java.util.Date());
-        site.setXx10cGeox(request.getXx10cGeox());
-        site.setXx10cGeoy(request.getXx10cGeoy());
-        site.setXtmsfcy(request.getXtmsfcy());
-
         xtmsSiteRepository.save(site);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Site updated successfully");
-        response.put("data",convertToDto(site));
+        response.put("data",SyncMapper.toDto(site));
         return ResponseEntity.ok(response);
-    }
-
-    private SiteDto convertToDto(XtmsSite site) {
-        SiteDto dto = new SiteDto();
-        dto.setSiteId(site.getSiteId());
-        dto.setSiteName(site.getSiteName());
-        dto.setFcysho(site.getFcysho());
-        dto.setCry(site.getCry());
-        dto.setBpaadd(site.getBpaadd());
-        dto.setUpdusr(site.getUpdusr());
-        dto.setUpddat(site.getUpddat());
-        dto.setCredattim(site.getCredattim());
-        dto.setUpddattim(site.getUpddattim());
-        dto.setXx10cGeoy(site.getXx10cGeoy());
-        dto.setXx10cGeox(site.getXx10cGeox());
-        dto.setXtmsfcy(site.getXtmsfcy());
-        dto.setXupdusr(site.getXupdusr());
-        dto.setXupdate(site.getXupdate());
-        dto.setX1cgeoso(site.getX1cgeoso());
-        dto.setXadd(site.getXadd());
-        dto.setXadddes(site.getXadddes());
-        dto.setLocategeoby(site.getLocategeoby());
-        dto.setRowid(site.getRowid());
-        return dto;
     }
 }

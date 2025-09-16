@@ -1,10 +1,9 @@
-package com.transport.tracking.response;
+package com.transport.sync.syncDto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter

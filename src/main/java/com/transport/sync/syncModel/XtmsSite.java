@@ -1,4 +1,4 @@
-package com.transport.tracking.model;
+package com.transport.sync.syncModel;
 
 import lombok.Getter;
 import lombok.Setter;
