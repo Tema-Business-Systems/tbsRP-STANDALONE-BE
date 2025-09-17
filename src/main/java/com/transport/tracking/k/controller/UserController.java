@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@CrossOrigin(origins={"http://localhost:3000","http://localhost:8082","http://localhost:8081","http://192.168.1.211:8081","http://192.168.1.211:8082","http://solutions.tema-systems.com:8081","http://solutions.tema-systems.com:8082"})
 @RequestMapping("/api/v1/user")
 @Slf4j
 public class UserController {
