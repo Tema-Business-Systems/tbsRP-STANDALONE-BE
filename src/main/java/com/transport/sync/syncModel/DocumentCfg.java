@@ -20,22 +20,22 @@ public class DocumentCfg {
     private Integer updTick;
 
     @Column(name = "XDOCUMENT_0")
-    private Short xDocument;
+    private Short xdocument;
 
     @Column(name = "XDOCTYP_0")
-    private String xDocTyp;
+    private String xdocTyp;
 
     @Column(name = "XROUTAG_0")
-    private String xRoutag;
+    private String xroutag;
 
     @Column(name = "XROUTAGFRA_0")
-    private String xRoutagFra;
+    private String xroutagFra;
 
     @Column(name = "X10C_SERVT_0")
     private Long x10cServt;
 
     @Column(name = "XSTYZON_0")
-    private String xStyZon;
+    private String xstyZon;
 
     @Column(name = "CREDATTIM_0")
     private LocalDateTime creDatTim;
@@ -51,4 +51,31 @@ public class DocumentCfg {
 
     @Column(name = "UPDUSR_0")
     private String updUsr;
+
+    @PrePersist
+    public void prePersist() {
+        if (creDatTim == null) {
+            creDatTim = LocalDateTime.now();
+        }
+        updDatTim = LocalDateTime.now();
+
+        if (auuid == null) {
+            auuid = UUID.randomUUID();
+        }
+        if (creUsr == null) {
+            creUsr = "";
+        }
+        if (updUsr == null) {
+            updUsr = "";
+        }
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updDatTim = LocalDateTime.now();
+
+        if (updUsr == null) {
+            updUsr = "";
+        }
+    }
 }

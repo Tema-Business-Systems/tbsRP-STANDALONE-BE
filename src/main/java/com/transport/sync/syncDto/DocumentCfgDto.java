@@ -9,12 +9,12 @@ import java.util.UUID;
 public class DocumentCfgDto {
     private Integer rowId;
     private Integer updTick;
-    private Short xDocument;
-    private String xDocTyp;
-    private String xRoutag;
-    private String xRoutagFra;
+    private Short xdocument;
+    private String xdocTyp;
+    private String xroutag;
+    private String xroutagFra;
     private Long x10cServt;
-    private String xStyZon;
+    private String xstyZon;
     private LocalDateTime creDatTim;
     private LocalDateTime updDatTim;
     private UUID auuid;

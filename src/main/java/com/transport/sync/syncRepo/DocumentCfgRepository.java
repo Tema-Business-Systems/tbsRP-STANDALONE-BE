@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface DocumentCfgRepository extends JpaRepository<DocumentCfg, Integer> {
-    @Query("SELECT d FROM DocumentCfg d WHERE d.xDocTyp = :xDocTyp AND d.xDocument = :xDocument")
-    Optional<DocumentCfg> findByDocTypAndDocument(@Param("xDocTyp") String xDocTyp,
-                                                  @Param("xDocument") Short xDocument);
+    @Query("SELECT d FROM DocumentCfg d WHERE d.xdocTyp = :xdocTyp AND d.xdocument = :xdocument")
+    Optional<DocumentCfg> findByDocTypAndDocument(@Param("xdocTyp") String xDocTyp,
+                                                  @Param("xdocument") Short xDocument);
 }

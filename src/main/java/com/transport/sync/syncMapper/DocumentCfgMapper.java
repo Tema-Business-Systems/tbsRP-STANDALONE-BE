@@ -12,12 +12,12 @@ public class DocumentCfgMapper {
         DocumentCfgDto dto = new DocumentCfgDto();
         dto.setRowId(entity.getRowId());
         dto.setUpdTick(entity.getUpdTick());
-        dto.setXDocument(entity.getXDocument());
-        dto.setXDocTyp(entity.getXDocTyp());
-        dto.setXRoutag(entity.getXRoutag());
-        dto.setXRoutagFra(entity.getXRoutagFra());
+        dto.setXdocument(entity.getXdocument());
+        dto.setXdocTyp(entity.getXdocTyp());
+        dto.setXroutag(entity.getXroutag());
+        dto.setXroutagFra(entity.getXroutagFra());
         dto.setX10cServt(entity.getX10cServt());
-        dto.setXStyZon(entity.getXStyZon());
+        dto.setXstyZon(entity.getXstyZon());
         dto.setCreDatTim(entity.getCreDatTim());
         dto.setUpdDatTim(entity.getUpdDatTim());
         dto.setAuuid(entity.getAuuid());
@@ -32,12 +32,12 @@ public class DocumentCfgMapper {
         DocumentCfg entity = new DocumentCfg();
         entity.setUpdTick(dto.getUpdTick());
 
-        entity.setXDocument(dto.getXDocument());
-        entity.setXDocTyp(dto.getXDocTyp());
-        entity.setXRoutag(dto.getXRoutag());
-        entity.setXRoutagFra(dto.getXRoutagFra());
+        entity.setXdocument(dto.getXdocument());
+        entity.setXdocTyp(dto.getXdocTyp());
+        entity.setXroutag(dto.getXroutag());
+        entity.setXroutagFra(dto.getXroutagFra());
         entity.setX10cServt(dto.getX10cServt());
-        entity.setXStyZon(dto.getXStyZon());
+        entity.setXstyZon(dto.getXstyZon());
         entity.setCreDatTim(dto.getCreDatTim());
         entity.setUpdDatTim(dto.getUpdDatTim());
         entity.setAuuid(dto.getAuuid());

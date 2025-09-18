@@ -4,6 +4,10 @@ import com.transport.sync.syncDto.SiteDto;
 import com.transport.sync.syncModel.XtmsSite;
 import com.transport.tracking.model.Facility;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 public class SyncMapper {
     private SyncMapper() {
 
@@ -38,9 +42,9 @@ public class SyncMapper {
     public static void updateEntityFromDto(SiteDto dto, XtmsSite site) {
         if (dto == null || site == null) return;
 
-        site.setLocategeoby(dto.getLocategeoby());
+        site.setLocategeoby("Manual");
         site.setXupdusr(dto.getXupdusr());
-        site.setXupdate(dto.getXupdate());
+        site.setXupdate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         site.setXx10cGeox(dto.getXx10cGeox());
         site.setXx10cGeoy(dto.getXx10cGeoy());
         site.setXtmsfcy(dto.getXtmsfcy());

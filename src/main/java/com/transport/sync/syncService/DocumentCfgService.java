@@ -30,8 +30,8 @@ public class DocumentCfgService implements IDocCfgService{
 
     @Override
     public Map<String, Object> createDocCfg(DocumentCfgDto dto) {
-        String xDocTyp = dto.getXDocTyp();
-        Short xDocument = dto.getXDocument();
+        String xDocTyp = dto.getXdocTyp();
+        Short xDocument = dto.getXdocument();
 
         Optional<DocumentCfg> existing = repository.findByDocTypAndDocument(xDocTyp, xDocument);
         if (existing.isPresent()) {
@@ -62,19 +62,19 @@ public class DocumentCfgService implements IDocCfgService{
         DocumentCfg existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("DocumentCfg not found with ID: " + id));
 
-        String xDocTyp = dto.getXDocTyp();
-        Short xDocument = dto.getXDocument();
+        String xDocTyp = dto.getXdocTyp();
+        Short xDocument = dto.getXdocument();
         Optional<DocumentCfg> duplicate = repository.findByDocTypAndDocument(xDocTyp, xDocument);
         if (duplicate.isPresent() && !duplicate.get().getRowId().equals(id)) {
             throw new RuntimeException(
                     "Record already exists with this doc type: " + xDocTyp + " and STD Doc: " + xDocument
             );
         }
-        existing.setXDocTyp(dto.getXDocTyp());
-        existing.setXDocument(dto.getXDocument());
-        existing.setXRoutag(dto.getXRoutag());
-        existing.setXRoutagFra(dto.getXRoutagFra());
-        existing.setXStyZon(dto.getXStyZon());
+        existing.setXdocTyp(dto.getXdocTyp());
+        existing.setXdocument(dto.getXdocument());
+        existing.setXroutag(dto.getXroutag());
+        existing.setXroutagFra(dto.getXroutagFra());
+        existing.setXstyZon(dto.getXstyZon());
         existing.setX10cServt(dto.getX10cServt());
         existing.setUpdTick(dto.getUpdTick());
         existing.setUpdUsr(dto.getUpdUsr());
